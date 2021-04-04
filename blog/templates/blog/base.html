@@ -1,0 +1,99 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'blog/styles.css' %}">
+
+    <title>Django Blog</title>
+</head>
+<body>
+    {% block content %}{% endblock %}
+    <nav class="navbar bg-dark navbar-expand-md navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}"><h3 class="title">MAMADBLOG</h3></a>
+            <button class="open-btn ml-auto d-md-none" onclick="openNav()">
+               <h4>≡</h4>
+            </button>
+            <div class="side-panel" id="sidePanel">
+                <a href="javascript:void(0)" class="close-btn" onclick="closeNav()">&times;</a>
+                <a class="nav-link label" href="{% url 'home' %}">HOME</a>
+                <a class="nav-link label" href="{% url 'create_article' %}">WRITE NEW ARTICLE</a>
+                {% if user.is_authenticated %}
+                    <div class="dropdown">
+                          <a class="nav-link dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            HEY {{ user }}
+                          </a>
+                          <div class="dropdown-menu text-dark label" aria-labelledby="dropdownMenuButton">
+                              <a class="dropdown-item label text-dark" style="color: #444444 !important; font-size: small" href="{% url 'user_articles' %}">MY ARTICLES</a>
+                          </div>
+                    </div>
+                    <form method="POST" style="display: none" action="{% url 'logout_user' %}">
+                        {% csrf_token %}
+                        <button type="submit" id="logoutButton"></button>
+                    </form>
+                    <a class="nav-link label" href="#" onclick="$('#logoutButton').click()">LOGOUT</a>
+                {% else %}
+                    <a class="nav-link label" href="{% url 'login_user' %}">LOGIN</a>
+                    <a class="nav-link label" href="{% url 'signup_user' %}">SIGN UP</a>
+                {% endif %}
+
+            </div>
+            <div class="collapse navbar-collapse" id="navbarNav">
+           <ul class="navbar-nav ml-auto" >
+                    <li class="nav-link label"><a class="nav-link" href="{% url 'home' %}">HOME</a></li>
+                    <li class="nav-link label"><a class="nav-link" href="{% url 'create_article' %}">WRITE NEW ARTICLE</a></li>
+                    {% if user.is_authenticated %}
+                        <li class="nav-link label">
+                            <div class="dropdown">
+                              <a class="nav-link dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                HEY {{ user }}
+                              </a>
+                              <div class="dropdown-menu text-dark label" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item label text-dark" style="color: #444444 !important; font-size: small" href="{% url 'user_articles' %}">MY ARTICLES</a>
+                              </div>
+                            </div>
+                        </li>
+                        <form method="POST" style="display: none" action="{% url 'logout_user' %}">
+                            {% csrf_token %}
+                            <button type="submit" id="logoutButton"></button>
+                        </form>
+                        <li class="nav-link label>"><a class="nav-link label" href="#" onclick="$('#logoutButton').click()">LOGOUT</a></li>
+                    {% else %}
+                        <li class="nav-link label>"><a class="nav-link label" href="{% url 'login_user' %}">LOGIN</a></li>
+                        <li class="nav-link label>"><a class="nav-link label" href="{% url 'signup_user' %}">SIGN UP</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+
+    </nav>
+
+    <style>
+
+    </style>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
+    <script>
+        function openNav() {
+            document.getElementById('sidePanel').style.width = '250px';
+        }
+
+        function closeNav() {
+            document.getElementById('sidePanel').style.width = '0';
+        }
+        $(window).scroll(function () {
+            $('nav').toggleClass('scrolled', $(this).scrollTop() > 200);
+            $('button').toggleClass('scrolled', $(this).scrollTop() > 200);
+
+        });
+    </script>
+</body>
+</html>

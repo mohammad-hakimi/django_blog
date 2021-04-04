@@ -1,0 +1,58 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+{% block content %}
+    <header id="image" class="jumbotron jumbotron-fluid">
+        <div class="container h-100 d-flex justify-content-center">
+            <div class="my-auto mx-auto">
+                <h3 class="text-light text-center title">{% if request.path == '/' %}Latest Blog Posts{% else %} {{ user }}'s Articles {% endif %}</h3>
+                <p class="lead label" style="color: #aeaeae">Read and get updated on how we progress</p>
+            </div>
+        </div>
+    </header>
+    <div class="container mt-5">
+        {% for article in articles %}
+            <div class="text-center">
+                <h3 class="title text-dark mt-5">{{ article.title }}</h3>
+                <small class="text-muted my-3 label">{{ article.date_created }}</small>
+                <br>
+                <img src="{{ article.image.url }}" alt="image" style="object-fit: cover;" class="mt-5 w-75">
+                <br>
+                <div class="row">
+                    <div class="label text-dark text-left mt-3 offset-2" >{{ article.content|truncatewords:10|safe }}</div>
+                </div>
+                <br>
+                <button class="btn btn-primary mb-5 label" style="border-radius: 50px" onclick="location.href='{% url 'show_article' article.id %}'">READ MORE</button>
+            </div>
+            <hr>
+        {% endfor %}
+    </div>
+    <footer>
+        <div class="container mb-5">
+            <div class="d-flex justify-content-between">
+                {% if articles.has_previous %}
+                    <button class="btn btn-light rounded-pill label"
+                            onclick="location.href='{% url "home" %}?page={{ articles.previous_page_number }}'"
+                            style="filter: drop-shadow(3px 3px 3px rgba(0, 0, 0, 0.3))">Previous</button>
+                {% else %}
+                    <button class="btn btn-light rounded-pill label disabled"
+                            style="filter: drop-shadow(3px 3px 3px rgba(0, 0, 0, 0.3))">Previous</button>
+                {% endif %}
+                {% if articles.has_next %}
+                    <button class="btn btn-light rounded-pill label"
+                            onclick="location.href='{% url "home" %}?page={{ articles.next_page_number }}'"
+                            style="filter: drop-shadow(3px 3px 3px rgba(0, 0, 0, 0.3))">Next</button>
+                {% else %}
+                    <button class="btn btn-light rounded-pill label disabled"
+                            style="filter: drop-shadow(3px 3px 3px rgba(0, 0, 0, 0.3))">Next</button>
+                {% endif %}
+            </div>
+        </div>
+    </footer>
+    <style>
+        #image{
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("{% static 'blog/home_background.jpg' %}") center;
+            background-size: cover;
+            height: 22rem;
+        }
+    </style>
+{% endblock %}

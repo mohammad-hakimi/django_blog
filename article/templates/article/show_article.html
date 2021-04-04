@@ -1,0 +1,30 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+{% block content %}
+    <header id="image" class="jumbotron jumbotron-fluid">
+        <div class="container h-100 d-flex justify-content-center">
+            <div class="my-auto mx-auto">
+                <p class="label text-center text-muted mb-5">{{ article.category }}</p>
+                <h1 class="text-light text-center title">{{ article.title }}</h1>
+                <p class="label text-center text-muted mt-5">By <span class="text-light"> {{ article.user }}</span> </p>
+                <div class="w-100 d-flex justify-content-center mt-4">
+                    <img class="text-center" src="{% static 'article/user.png' %}" alt="user" width="50" height="50" style="border-radius: 25px">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container mt-5 text-left text-justify">
+        <div class="text-left label text-justify"> {{ article.content|safe }}</div>
+    </div>
+
+    <style>
+        #image{
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("{{ article.image.url }}") center;
+            background-size: cover;
+            height: 42rem;
+        }
+    </style>
+
+
+{% endblock %}
